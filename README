@@ -1,3 +1,37 @@
 
-A test blog (how imaginativ !) in Tapestry 5  and Scala
+A test blog (how imaginative !) in Tapestry 5  and Scala
 
+#Install / Test
+---------------
+
+For now, this test use Maven and the Scala-plugin:
+http://scala-tools.org/mvnsites/maven-scala-plugin/index.html
+
+You will need at least Maven 2.0.9 to build the project.
+So, when maven is installed, simply use the command:
+
+% mvn jetty:run
+
+This command will download the universe (two times), so you can go 
+and drink a coffee. When maven is done, you should see something like:
+8<------------------------------------------------------
+...
+                  ValidationMessagesSource: DEFINED
+                        ValueEncoderSource: DEFINED
+
+83,33% unrealized services (115/138)
+
+2009-01-07 07:38:33.677::INFO:  Started SelectChannelConnector@0.0.0.0:8080
+[INFO] Started Jetty Server
+8<------------------------------------------------------
+
+Just go to http://localhost:8080/blog/ 
+Your first Tapestry 5 application in Scala is up and running !
+
+When you are done, hit CTRL-C to stop Jetty.
+
+You can also use
+
+% mvn package
+
+To build a war and test it in your preferred application server. 
