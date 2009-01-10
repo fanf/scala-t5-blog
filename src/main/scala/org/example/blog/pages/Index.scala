@@ -16,7 +16,9 @@
 
 package org.example.blog.pages;
 
-import java.util.Date
+import org.apache.tapestry5.ioc.annotations.Inject
+
+import org.example.blog.data.Configuration
 
 /**
  * Start page of application myapp.
@@ -24,7 +26,11 @@ import java.util.Date
  * @author <a href="mailto:fanf42@gmail.com">Francois Armand</a> 
  */
 class Index {
+  
+  @Inject
+  var conf : Configuration = _
     
-  	def getCurrentTime = new Date
-
+  
+  def getUser = conf.author
+  
 }

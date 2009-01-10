@@ -1,18 +1,9 @@
 <html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd">
-    <head>
-        <title>Blog Start Page</title>
-    </head>
-    <body>
-        <h1>Blog Start Page</h1>
-
-        <p> This is the start page for this application, a good place to start your modifications.
-            Just to prove this is live: </p>
-
-        <p> The current time is: ${currentTime}. </p>
-
-        <p>
-            [<t:pagelink t:page="Index">refresh</t:pagelink>]
-        </p>
-
-    </body>
+	<head>
+		<title>Blog Start Page</title>
+	</head>
+	<body>
+		<h1>${user.login}'s blog Start Page</h1>
+		
+	</body>
 </html>
