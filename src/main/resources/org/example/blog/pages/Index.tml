@@ -3,7 +3,9 @@
 		<title>Blog Start Page</title>
 	</head>
 	<body>
-		<h1>${user.login}'s blog Start Page</h1>
+		<h1>${conf.blogTitle}</h1>
 		
+		<p>User info:</p>
+		<t:beandisplay t:object="conf.author"/>
 	</body>
 </html>

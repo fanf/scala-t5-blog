@@ -17,6 +17,7 @@
 package org.example.blog.pages;
 
 import org.apache.tapestry5.ioc.annotations.Inject
+import org.apache.tapestry5.annotations.Property
 
 import org.example.blog.data.Configuration
 
@@ -27,10 +28,7 @@ import org.example.blog.data.Configuration
  */
 class Index {
   
-  @Inject
+  @Inject @Property
   var conf : Configuration = _
-    
-  
-  def getUser = conf.author
   
 }

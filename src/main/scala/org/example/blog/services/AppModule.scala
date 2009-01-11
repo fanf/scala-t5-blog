@@ -51,6 +51,8 @@ object AppModule {
     val author = new User("jondoe")
     author.commonname = "Jon"
     author.surname = "Doe"
+    author.email = "jondoe@foo.bar"
+    
     new Configuration(author)
   }
   
