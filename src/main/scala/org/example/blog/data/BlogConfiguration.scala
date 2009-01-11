@@ -7,6 +7,9 @@ class BlogConfiguration(val author:User) {
   @BeanProperty
   var blogTitle = "%s's blog".format(author.login)
   
+  @BeanProperty
+  var blogDescription = "Blog description"
+  
   def getAuthor = author
 }
 
