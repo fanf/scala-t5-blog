@@ -1,13 +1,13 @@
 <html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd">
 	<head>
-		<title>Blog Start Page</title>
+		<title>Tapestry 5 - Scala blog</title>
 	</head>
 	<body>
 		<h1>${conf.blogTitle}</h1>
 		
-		<p>User info:</p>
+		<p>Author info:</p>
 		<t:beandisplay t:object="conf.author" />
-		<p>Update info:</p>
+		<p>Update author info:</p>
 		<t:beaneditform t:object="conf.author" />
 	</body>
 </html>

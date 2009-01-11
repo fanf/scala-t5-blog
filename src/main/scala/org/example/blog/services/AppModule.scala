@@ -47,13 +47,13 @@ object AppModule {
     //binder.bind(classOf[Echo], classOf[EchoImpl])
   }
 
-  def buildConfiguration() : Configuration = {
+  def buildBlogConfiguration = {
     val author = new User("jondoe")
     author.commonname = "Jon"
     author.surname = "Doe"
     author.email = "jondoe@foo.bar"
     
-    new Configuration(author)
+    new BlogConfiguration(author)
   }
   
   def contributeApplicationDefaults(configuration : MappedConfiguration[String, String]) {

@@ -19,7 +19,7 @@ package org.example.blog.pages;
 import org.apache.tapestry5.ioc.annotations.Inject
 import org.apache.tapestry5.annotations.Property
 
-import org.example.blog.data.Configuration
+import org.example.blog.data.BlogConfiguration
 
 /**
  * Start page of application myapp.
@@ -29,6 +29,6 @@ import org.example.blog.data.Configuration
 class Index {
   
   @Inject @Property
-  var conf : Configuration = _
+  var conf : BlogConfiguration = _
   
 }
