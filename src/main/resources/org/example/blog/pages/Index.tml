@@ -6,6 +6,8 @@
 		<h1>${conf.blogTitle}</h1>
 		
 		<p>User info:</p>
-		<t:beandisplay t:object="conf.author"/>
+		<t:beandisplay t:object="conf.author" />
+		<p>Update info:</p>
+		<t:beaneditform t:object="conf.author" />
 	</body>
 </html>
