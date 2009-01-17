@@ -14,32 +14,31 @@
  *           http://fanf42.blogspot.com
  */
 
-package org.example.blog.pages;
+package org.example.blog.pages.article
 
 import org.apache.tapestry5.ioc.annotations.Inject
 import org.apache.tapestry5.annotations.Property
 
 import org.example.blog.data.Article
-import org.example.blog.services.ReadDao
+import org.example.blog.services.ReadWriteDao
 
-/**
- * Start page of application myapp.
- * 
- * @author <a href="mailto:fanf42@gmail.com">Francois Armand</a> 
- */
-class Index {
+class ManageArticle {
   
   @Inject
-  var readArticleDao : ReadDao[Article, String] = _
-  
-  @Property
-  var articles : Array[Article] = _
+  var rwDao : ReadWriteDao[Article, String] = _
   
   @Property
   var article : Article = _
   
-  def setupRender {
-    articles = readArticleDao.find( _.published == true ).toArray
+  def getArticles() = this.rwDao.getAll.sort( _.creationDate.getTime > _.creationDate.getTime ).toArray
+  
+  def getChangePublication = if(article.published) "Un-published" else "Published"
+
+  
+  def onActionFromChangePublication(id:String) {
+    val a = this.rwDao.get(id).getOrElse(error("No such article, id: " + id) )
+    a.published = !a.published
+    this.rwDao.save(a)
   }
   
 }

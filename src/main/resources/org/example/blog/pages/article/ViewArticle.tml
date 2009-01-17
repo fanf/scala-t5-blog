@@ -1,0 +1,10 @@
+<t:layout xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd">
+
+	<h2>${article.title}</h2>
+	<h4>by ${authorname}, on ${article.creationDate}</h4>
+	
+	<div>
+		${article.content}
+	</div>
+
+</t:layout>

@@ -23,6 +23,7 @@ import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.Local;
+import org.apache.tapestry5.ioc.services
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.RequestFilter;
 import org.apache.tapestry5.services.RequestHandler;
@@ -31,6 +32,8 @@ import org.slf4j.Logger;
 
 
 import org.example.blog.data._
+
+import org.example.blog.services.impl.dao.InmemoryArticleDao
 
 /**
 * This module is automatically included as part of the Tapestry IoC Registry, it's a good place to
@@ -55,6 +58,23 @@ object AppModule {
     
     new BlogConfiguration(author)
   }
+  
+  
+  def buildArticleDao = {
+    val a1 = new Article(None)
+    a1.title = "First article"
+    a1.content = "Content content content content"
+    
+    val a2 = new Article(None)
+    a2.title = "First article"
+    a2.content = "Content content content content"
+    
+    val m = new InmemoryArticleDao()
+    m.save(a1)
+    m.save(a2)
+    m
+  }
+  
   
   def contributeApplicationDefaults(configuration : MappedConfiguration[String, String]) {
     // Contributions to ApplicationDefaults will override any contributions to
@@ -121,4 +141,5 @@ object AppModule {
      // within the pipeline.
      configuration.add("Timing", filter);
    }
+   
 }

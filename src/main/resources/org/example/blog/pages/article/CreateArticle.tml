@@ -1,0 +1,25 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<t:layout xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd">
+	<h2>New article</h2>
+
+
+	<t:form t:id="NewArticleForm">
+				
+		<p>
+			<t:output t:value="article.creationdate" t:format="dateformat" /><br/>
+			<t:label for="publish" />&nbsp;<t:checkbox t:id="publish" t:value="article.published" />
+		</p>
+		
+		<p>
+			<t:label for="title"/><br/>
+			<t:textfield t:id="title" value="article.title" />
+		</p>
+		
+		<p>
+			<t:label for="content" /><br/>
+			<t:textarea t:id="content" value="article.content" />
+		</p>
+		<t:submit />
+	</t:form>
+	
+</t:layout>

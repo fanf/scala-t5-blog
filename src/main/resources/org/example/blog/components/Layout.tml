@@ -17,15 +17,10 @@
 	
 		<div id="menu">
 			<ul>
-				<li><a href="#">Home</a></li>
-				<li><a href="#">About</a></li>
-				<li><a href="#">Photos</a></li>
-				<li><a href="#">Links</a></li>
-				<li><a href="#">Forum</a></li>
-				<li><a href="#">Free Stuff</a></li>
-				<li><a href="#">Downloads</a></li>
-				<li><a href="#">Products</a></li>
-				<li><a href="#">SiteMap</a></li>
+				<li><a t:type="pagelink" t:page="index">Home</a></li>
+				<li><a t:type="pagelink" t:page="about">About</a></li>
+				<li><a t:type="pagelink" t:page="article/create">New article</a></li>
+				<li><a t:type="pagelink" t:page="article/manage">Manage article</a></li>
 			</ul>
 		</div>
 		

@@ -1,0 +1,29 @@
+<t:layout xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd">
+
+	<h2>List, modify, publish article</h2>
+	
+	<t:grid source="articles" row="article"
+			reorder="title" exclude="content" add="comments,publish,edit">
+		
+		<t:parameter name="titleCell">
+			<t:pagelink t:page="article/view" t:context="article.id.get()">
+				${article.title}
+			</t:pagelink>
+		</t:parameter>
+
+		<t:parameter name="publishCell">
+			<t:actionlink t:id="changePublication" t:context="article.id.get()">${changePublication}</t:actionlink>
+		</t:parameter>
+		
+		<t:parameter name="commentsCell">
+			${article.comments.size()}
+		</t:parameter>
+	
+		<t:parameter name="editCell">
+			<t:pagelink t:page="article/edit" t:context="article.id.get()">
+				edit
+			</t:pagelink>
+		</t:parameter>
+	</t:grid>
+
+</t:layout>

@@ -1,0 +1,7 @@
+<t:layout xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd">
+	<h2>About me</h2>
+		
+	<t:beandisplay t:object="conf.author" />
+	<p>Update author info:</p>
+	<t:beaneditform t:object="conf.author" />
+</t:layout>

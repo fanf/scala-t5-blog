@@ -1,7 +1,15 @@
 <t:layout xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd">
-	<h2>About me</h2>
+
+	<h2>Last articles</h2>
+
+	<t:loop source="articles" value="article">
+		<a t:type="pagelink" t:page="article/view" t:context="article.id.elements()">
+			<h3>${article.title}</h3>
+		</a>
 		
-	<t:beandisplay t:object="conf.author" />
-	<p>Update author info:</p>
-	<t:beaneditform t:object="conf.author" />
+		<div>
+			${article.content}
+		</div>
+	</t:loop>
+	
 </t:layout>

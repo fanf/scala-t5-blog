@@ -14,32 +14,30 @@
  *           http://fanf42.blogspot.com
  */
 
-package org.example.blog.pages;
+package org.example.blog.pages.article
 
+import org.example.blog.services.ReadDao
 import org.apache.tapestry5.ioc.annotations.Inject
 import org.apache.tapestry5.annotations.Property
 
 import org.example.blog.data.Article
-import org.example.blog.services.ReadDao
+import org.example.blog.data.BlogConfiguration
 
-/**
- * Start page of application myapp.
- * 
- * @author <a href="mailto:fanf42@gmail.com">Francois Armand</a> 
- */
-class Index {
-  
+class ViewArticle {
+
   @Inject
-  var readArticleDao : ReadDao[Article, String] = _
-  
-  @Property
-  var articles : Array[Article] = _
+  var articleDao : ReadDao[Article,String] = _
+
+  @Inject
+  var conf : BlogConfiguration = _
   
   @Property
   var article : Article = _
   
+  def getAuthorName() = this.conf.getAuthor.getLogin
+  
   def setupRender {
-    articles = readArticleDao.find( _.published == true ).toArray
+    this.article = this.articleDao.get("a").getOrElse(new Article(None))
   }
   
 }
