@@ -22,7 +22,7 @@ import org.apache.tapestry5.ioc.annotations.Inject
 import org.example.blog.data.Article
 import org.example.blog.services.WriteDao
 
-import org.example.blog.pages.Index
+import org.example.blog.pages.article.ManageArticle
   
 import java.text.DateFormat
 
@@ -33,7 +33,7 @@ class CreateArticle {
   var article : Article = _
     
   @InjectPage
-  var returnPage : Index = _
+  var returnPage : ManageArticle = _
   
   @Inject
   var articleDao : WriteDao[Article,String] = _

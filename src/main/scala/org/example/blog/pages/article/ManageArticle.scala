@@ -41,4 +41,10 @@ class ManageArticle {
     this.rwDao.save(a)
   }
   
+  def onActionFromDelete(id:String) {
+    if(!this.rwDao.delete(id)) {
+      error("Can not delete this article")
+    }
+  }
+  
 }

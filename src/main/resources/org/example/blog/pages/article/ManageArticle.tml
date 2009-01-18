@@ -3,7 +3,7 @@
 	<h2>List, modify, publish article</h2>
 	
 	<t:grid source="articles" row="article"
-			reorder="title" exclude="content" add="comments,publish,edit">
+			reorder="title" exclude="content" add="comments,publish,edit,delete">
 		
 		<t:parameter name="titleCell">
 			<t:pagelink t:page="article/view" t:context="article.id.get()">
@@ -14,7 +14,7 @@
 		<t:parameter name="publishCell">
 			<t:actionlink t:id="changePublication" t:context="article.id.get()">${changePublication}</t:actionlink>
 		</t:parameter>
-		
+
 		<t:parameter name="commentsCell">
 			${article.comments.size()}
 		</t:parameter>
@@ -24,6 +24,14 @@
 				edit
 			</t:pagelink>
 		</t:parameter>
+		
+		<t:parameter name="deleteCell">
+			<t:actionlink t:id="delete" t:context="article.id.get()">
+				delete
+			</t:actionlink>
+		</t:parameter>
+		
+		
 	</t:grid>
 
 </t:layout>

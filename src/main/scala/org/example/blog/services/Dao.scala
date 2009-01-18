@@ -13,6 +13,14 @@ trait ReadDao[T, K <: Serializable] {
 
 trait WriteDao[T, K <: Serializable] {
   def save(entity:T) : Option[T]
+  
+  /**
+   * Delete the article matching this id. 
+   * If no article match this id, does nothing.
+   * Return true is the deletion is successful
+   */
+  def delete(id:K) : Boolean
+
 }
 
 trait ReadWriteDao[T, K <: Serializable] extends ReadDao[T,K] with WriteDao[T,K]

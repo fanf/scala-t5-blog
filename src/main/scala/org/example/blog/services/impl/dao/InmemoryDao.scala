@@ -18,7 +18,9 @@ package org.example.blog.services.impl.dao
 
 import org.example.blog.data.Article
 import scala.collection.mutable
-  
+
+import org.example.blog.services.ReadWriteDao
+
 /**
  * A simple, naive implementation of the Article DAO.
  * In particular, this implementation is
@@ -35,14 +37,14 @@ class InmemoryArticleDao extends ReadWriteDao[Article, String] {
     id
   }
   
-  override def get(id:String) = this.memory.get(id)
+  def get(id:String) = this.memory.get(id)
 
-  override def getAll() = this.memory.values.toList
+  def getAll() = this.memory.values.toList
  
-  override def find(filter: Article => Boolean) = 
+  def find(filter: Article => Boolean) = 
     this.memory.filter( (pair:(String,Article)) => filter(pair._2) ).map( (p:(String,Article)) => p._2).toList
 
-  override def save(a:Article) = {
+  def save(a:Article) = {
     val a2 = a.id match {
       case None => 
         val i = this.newId
@@ -51,5 +53,10 @@ class InmemoryArticleDao extends ReadWriteDao[Article, String] {
     }
     assert(a2.id.isDefined)
     this.memory.put(a2.id.get,a2)
+    this.memory.get(a2.id.get)
+  }
+  
+  def delete(id:String) = {
+    !((this.memory - id) isDefinedAt(id))
   }
 }
