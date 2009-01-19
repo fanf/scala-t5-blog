@@ -30,7 +30,7 @@ class ManageArticle {
   @Property
   var article : Article = _
   
-  def getArticles() = this.rwDao.getAll.sort( _.creationDate.getTime > _.creationDate.getTime ).toArray
+  def getArticles = this.rwDao.getAll.sort( _.creationDate.getTime > _.creationDate.getTime ).toArray
   
   def getChangePublication = if(article.published) "Un-published" else "Published"
 
@@ -45,6 +45,5 @@ class ManageArticle {
     if(!this.rwDao.delete(id)) {
       error("Can not delete this article")
     }
-  }
-  
+  }  
 }

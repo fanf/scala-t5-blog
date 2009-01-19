@@ -12,7 +12,9 @@
 		</t:parameter>
 
 		<t:parameter name="publishCell">
-			<t:actionlink t:id="changePublication" t:context="article.displayid">${changePublication}</t:actionlink>
+			<t:actionlink t:id="changePublication" t:context="article.displayid">
+				${changePublication}
+			</t:actionlink>
 		</t:parameter>
 
 		<t:parameter name="commentsCell">
