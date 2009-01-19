@@ -10,7 +10,7 @@
 		
 		<p>
 			<t:label for="title"/><br/>
-			<t:textfield class="large" t:id="title" value="article.title" />
+			<t:textfield class="large" t:id="title" value="article.title" validate="required"/>
 		</p>
 		
 		<p>

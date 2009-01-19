@@ -34,7 +34,6 @@ class ManageArticle {
   
   def getChangePublication = if(article.published) "Un-published" else "Published"
 
-  
   def onActionFromChangePublication(id:String) {
     val a = this.rwDao.get(id).getOrElse(error("No such article, id: " + id) )
     a.published = !a.published

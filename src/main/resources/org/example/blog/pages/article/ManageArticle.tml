@@ -32,8 +32,6 @@
 				delete
 			</t:actionlink>
 		</t:parameter>
-		
-		
-	</t:grid>
 
+	</t:grid>
 </t:layout>
