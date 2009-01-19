@@ -28,35 +28,40 @@ import org.example.blog.services.ReadWriteDao
  */
 class InmemoryArticleDao extends ReadWriteDao[Article, String] {
   
-  val memory : mutable.Map[String, Article] = new mutable.HashMap()
-
-  var id = 0
-  
-  private def newId = {
-    id = id + 1
-    id
-  }
+  private val memory : mutable.Map[String, Article] = new mutable.HashMap()
+  private var id = 0
+  private def newId = { id = id + 1 ; id }
   
   def get(id:String) = this.memory.get(id)
 
   def getAll() = this.memory.values.toList
  
-  def find(filter: Article => Boolean) = 
-    this.memory.filter( (pair:(String,Article)) => filter(pair._2) ).map( (p:(String,Article)) => p._2).toList
+  def plop(filter: Article => Boolean) : List[Article] = {
+    var articles = List[Article]()
+    for(a <- this.memory.values) {
+      if(filter(a)) articles = a :: articles 
+    }
+    articles
+  }
 
-  def save(a:Article) = {
-    val a2 = a.id match {
+  def find(filter: Article => Boolean) = 
+    (for { 
+      a <- this.memory.values
+      if(filter(a))
+    } yield a).toList
+
+  def save(article:Article) = {
+    val a = article.id match {
       case None => 
         val i = this.newId
-        Article.from(i.toString,a)
-      case Some(id) => a
+        Article(i.toString,article)
+      case Some(id) => article
     }
-    assert(a2.id.isDefined)
-    this.memory.put(a2.id.get,a2)
-    this.memory.get(a2.id.get)
+    assert(a.id.isDefined)
+    this.memory.put(a.id.get,a)
+    //check if article is in map for the id, return id if OK
+    this.memory.get(a.id.get).map( _.id.get)
   }
   
-  def delete(id:String) = {
-    !((this.memory - id) isDefinedAt(id))
-  }
+  def delete(id:String) = !( (this.memory - id) isDefinedAt(id) )
 }

@@ -63,11 +63,12 @@ object AppModule {
   def buildArticleDao = {
     val a1 = new Article(None)
     a1.title = "First article"
-    a1.content = "Content content content content"
+    a1.content = "Content for the first article"
+    a1.published = true
     
     val a2 = new Article(None)
-    a2.title = "First article"
-    a2.content = "Content content content content"
+    a2.title = "Second article"
+    a2.content = "Content for the second article"
     
     val m = new InmemoryArticleDao()
     m.save(a1)
