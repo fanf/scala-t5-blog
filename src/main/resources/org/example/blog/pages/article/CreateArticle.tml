@@ -1,12 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <t:layout xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd">
-	<h2>New article</h2>
-
+	<h2>Create a new article</h2>
 
 	<t:form t:id="NewArticleForm" class="new-article">
 				
 		<p>
-			<t:output t:value="article.creationdate" t:format="dateformat" /><br/>
 			<t:label for="publish" />&nbsp;<t:checkbox t:id="publish" t:value="article.published" />
 		</p>
 		

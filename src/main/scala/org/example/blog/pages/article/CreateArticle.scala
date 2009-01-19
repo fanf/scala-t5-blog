@@ -21,37 +21,30 @@ import org.apache.tapestry5.ioc.annotations.Inject
 
 import org.example.blog.data.Article
 import org.example.blog.services.WriteDao
-
-import org.example.blog.pages.article.ManageArticle
-  
+ 
 import java.text.DateFormat
 
 class CreateArticle {
 
+  @Inject
+  var articleDao : WriteDao[Article,String] = _
   
   @Persist @Property
   var article : Article = _
     
   @InjectPage
-  var returnPage : ManageArticle = _
-  
-  @Inject
-  var articleDao : WriteDao[Article,String] = _
-  
-  @Property
-  val dateFormat = DateFormat.getDateTimeInstance(DateFormat.MEDIUM,DateFormat.MEDIUM,java.util.Locale.FRENCH )
+  var redirectPage : ManageArticle = _
   
   def setupRender {
     if(null == this.article) {
       this.article = new Article(None)
-    }
-    
+    } 
   }
   
   def onSuccessFromNewArticleForm = {
     articleDao.save(article) match {
-      case None => error("Dao error")
-      case _ => this.article = null ; returnPage
+      case None => error("Dao error ! Please retry.")
+      case _ => this.article = null ; redirectPage
     }
   }
 }
