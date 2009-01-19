@@ -1,15 +1,11 @@
 <t:layout xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd">
 
-	<h2>Last articles</h2>
-
-	<t:loop source="articles" value="article">
-		<a t:type="pagelink" t:page="article/view" t:context="article.id.elements()">
-			<h3>${article.title}</h3>
-		</a>
+	<div t:type="loop" t:source="articles" t:value="article" class="article">
+		<h2><a t:type="pagelink" t:page="article/view" t:context="article.displayid">
+			${article.title}
+		</a></h2>
 		
-		<div>
-			${article.content}
-		</div>
-	</t:loop>
+		<div>${article.content}</div>
+	</div>
 	
 </t:layout>
