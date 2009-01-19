@@ -6,13 +6,13 @@
 			reorder="title" exclude="content" add="comments,publish,edit,delete">
 		
 		<t:parameter name="titleCell">
-			<t:pagelink t:page="article/view" t:context="article.id.get()">
+			<t:pagelink t:page="article/view" t:context="article.displayid">
 				${article.title}
 			</t:pagelink>
 		</t:parameter>
 
 		<t:parameter name="publishCell">
-			<t:actionlink t:id="changePublication" t:context="article.id.get()">${changePublication}</t:actionlink>
+			<t:actionlink t:id="changePublication" t:context="article.displayid">${changePublication}</t:actionlink>
 		</t:parameter>
 
 		<t:parameter name="commentsCell">
@@ -20,13 +20,13 @@
 		</t:parameter>
 	
 		<t:parameter name="editCell">
-			<t:pagelink t:page="article/edit" t:context="article.id.get()">
+			<t:pagelink t:page="article/edit" t:context="article.displayid">
 				edit
 			</t:pagelink>
 		</t:parameter>
 		
 		<t:parameter name="deleteCell">
-			<t:actionlink t:id="delete" t:context="article.id.get()">
+			<t:actionlink t:id="delete" t:context="article.displayid">
 				delete
 			</t:actionlink>
 		</t:parameter>

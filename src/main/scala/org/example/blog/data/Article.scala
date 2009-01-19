@@ -20,6 +20,11 @@ import java.util.Date
 import scala.reflect.BeanProperty
 
 class Article(val id:Option[String]) {
+  /*
+   * "none" is not allowed for article ID
+   */
+  assert( id.forall( (s:String)=> !(s.toLowerCase == "none" ))) 
+  
   @BeanProperty var creationDate = new Date()
   
   @BeanProperty var title = ""
@@ -31,22 +36,29 @@ class Article(val id:Option[String]) {
   @BeanProperty var published = false
   
   def getId = id
+  
+  /*
+   * String translation of the ID. Of course, it 
+   * requires that id can't be the "None" String, 
+   * and that's why we add the "assert" requirement
+   */
+  def getDisplayId = this.id.getOrElse("None") 
 }
 
 object Article {
   
   /*
-   * Create a new Article from an other, 
-   * setting the ID to a ne value.
+   * Create a copy Article from a source one, 
+   * setting the ID to a new value.
    */
-  def from(id:String, a:Article) : Article = {
-    val aa = new Article(Some(id))
-    aa.title = a.title
-    aa.content = a.content
-    aa.comments = a.comments
-    aa.creationDate = a.creationDate
-    aa.published = a.published
-    aa
+  def apply(id:String, source:Article) : Article = {
+    val a = new Article(Some(id))
+    a.title = source.title
+    a.content = source.content
+    a.comments = source.comments
+    a.creationDate = source.creationDate
+    a.published = source.published
+    a
   }
   
 }
