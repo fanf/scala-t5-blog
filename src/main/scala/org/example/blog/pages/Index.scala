@@ -32,14 +32,8 @@ class Index {
   @Inject
   var readArticleDao : ReadDao[Article, String] = _
   
-  @Property
-  var articles : Array[Article] = _
+  def getArticles = readArticleDao.find( _.published == true ).toArray
   
   @Property
   var article : Article = _
-  
-  def setupRender {
-    articles = readArticleDao.find( _.published == true ).toArray
-  }
-  
 }
