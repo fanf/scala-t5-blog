@@ -23,7 +23,7 @@ import org.apache.tapestry5.RenderSupport
 
 import org.example.blog.data.BlogConfiguration
 
-@IncludeStylesheet(Array("context:css/red/style.css"))
+@IncludeStylesheet(Array("context:theme/red/style.css"))
 class Layout {
 
   @Inject @Property

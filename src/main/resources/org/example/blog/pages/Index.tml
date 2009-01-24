@@ -8,4 +8,11 @@
 		<div>${article.content}</div>
 	</div>
 	
+	<p>
+		
+		<t:eventlink t:id="elink" t:event="foo" t:context="literal:bar42">event link</t:eventlink>
+		<br/>
+		<t:actionlink t:id="alink" t:context="literal:bar42">event link</t:actionlink>
+	</p>
+	
 </t:layout>

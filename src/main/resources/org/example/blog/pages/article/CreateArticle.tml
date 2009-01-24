@@ -2,7 +2,7 @@
 <t:layout xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd">
 	<h2>Create a new article</h2>
 
-	<t:form t:id="NewArticleForm" class="new-article">
+	<t:form t:id="NewArticleForm" class="new-article" context="literal:foo42">
 				
 		<p>
 			<t:label for="publish" />&nbsp;<t:checkbox t:id="publish" t:value="article.published" />
@@ -19,5 +19,4 @@
 		</p>
 		<t:submit />
 	</t:form>
-	
 </t:layout>
