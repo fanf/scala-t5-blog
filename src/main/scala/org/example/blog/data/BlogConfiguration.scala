@@ -10,6 +10,9 @@ class BlogConfiguration(val author:User) {
   @BeanProperty
   var blogDescription = "Blog description"
   
+  @BeanProperty
+  var persistencePath = "/tmp/blog_scala"
+  
   def getAuthor = author
 }
 

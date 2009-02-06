@@ -17,11 +17,14 @@
 package org.example.blog.pages.article
 
 import org.example.blog.services.ReadDao
-import org.apache.tapestry5.ioc.annotations.Inject
-import org.apache.tapestry5.annotations.Property
+import org.example.blog.services.ClientMarshaller
 
 import org.example.blog.data.Article
 import org.example.blog.data.BlogConfiguration
+
+import org.apache.tapestry5.ioc.annotations.Inject
+import org.apache.tapestry5.annotations.Property
+import org.apache.tapestry5.util.TextStreamResponse
 
 class ViewArticle {
 
@@ -31,13 +34,35 @@ class ViewArticle {
   @Inject
   var conf : BlogConfiguration = _
   
+  @Inject 
+  var marshaller : ClientMarshaller = _
+    
   @Property
   var article : Article = _
+  
+  var id : String = _
+  
+  def onActivate(id:String) = this.id = id
   
   def getAuthorName() = this.conf.getAuthor.getLogin
   
   def setupRender {
-    this.article = this.articleDao.get("a").getOrElse(new Article(None))
+    this.article = this.get(id)
+  }
+
+  
+  def onXml = new TextStreamResponse("text/xml",this.marshaller.to("null",null))
+  def onJson = onXml
+  
+  def onXml(id:String) = {
+    new TextStreamResponse("text/xml",this.marshaller.to("xml",this.get(id)))
+  }
+
+  def onJson(id:String) = {
+    new TextStreamResponse("text/plain",this.marshaller.to("json",this.get(id)))
   }
   
+  private def get(id:String) = 
+    if(null == id ) new Article(None) 
+    else this.articleDao.get(id).getOrElse(new Article(None))
 }

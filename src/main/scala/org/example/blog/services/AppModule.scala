@@ -18,36 +18,43 @@ package org.example.blog.services;
 
 import java.io.IOException;
 
-import org.apache.tapestry5.SymbolConstants;
-import org.apache.tapestry5.ioc.MappedConfiguration;
-import org.apache.tapestry5.ioc.OrderedConfiguration;
-import org.apache.tapestry5.ioc.ServiceBinder;
-import org.apache.tapestry5.ioc.annotations.Local;
+import org.apache.tapestry5.SymbolConstants
+import org.apache.tapestry5.ioc.annotations.{InjectService,EagerLoad}
+import org.apache.tapestry5.ioc.{MappedConfiguration,OrderedConfiguration,ServiceBinder,ObjectLocator}
+import org.apache.tapestry5.ioc.annotations.Local
 import org.apache.tapestry5.ioc.services
-import org.apache.tapestry5.services.Request;
-import org.apache.tapestry5.services.RequestFilter;
-import org.apache.tapestry5.services.RequestHandler;
-import org.apache.tapestry5.services.Response;
-import org.slf4j.Logger;
+import org.apache.tapestry5.ioc.services.ChainBuilder
+import org.apache.tapestry5.services.Request
+import org.apache.tapestry5.services.RequestFilter
+import org.apache.tapestry5.services.RequestHandler
+import org.apache.tapestry5.services.Response
+import org.apache.tapestry5.ioc.services.StrategyBuilder
+import org.apache.tapestry5.ioc.util.StrategyRegistry
+import org.slf4j.Logger
 
 
 import org.example.blog.data._
-
+import org.example.blog.services.impl._
 import org.example.blog.services.impl.dao.InmemoryArticleDao
+import com.thoughtworks.xstream.converters.SingleValueConverter
 
 /**
 * This module is automatically included as part of the Tapestry IoC Registry, it's a good place to
 * configure and extend Tapestry, or to place your own service definitions.
 */
 object AppModule {
+  
   def bind(binder : ServiceBinder) {
-    // binder.bind(MyServiceInterface.class, MyServiceImpl.class);
 
-    // Make bind() calls on the binder object to define most IoC services.
-    // Use service builder methods (example below) when the implementation
-    // is provided inline, or requires more initialization than simply
-    // invoking the constructor.
-    //binder.bind(classOf[Echo], classOf[EchoImpl])
+    binder.bind[XstreamClassAlias](classOf[XstreamClassAlias], classOf[impl.XstreamClassAliasImpl])
+    binder.bind[XstreamPackageAlias](classOf[XstreamPackageAlias], classOf[impl.XstreamPackageAliasImpl])
+    binder.bind[XstreamFieldAlias](classOf[XstreamFieldAlias], classOf[impl.XstreamFieldAliasImpl])
+    binder.bind[XstreamImplicitCollection](classOf[XstreamImplicitCollection], classOf[impl.XstreamImplicitCollectionImpl])
+    binder.bind[XstreamOmitField](classOf[XstreamOmitField], classOf[impl.XstreamOmitFieldImpl])
+    binder.bind[XstreamRegisterConverter](classOf[XstreamRegisterConverter], classOf[impl.XstreamRegisterConverterImpl])
+
+    binder.bind[Marshaller](classOf[Marshaller],classOf[impl.XmlXstreamMarshaller]) withId "xmlMarshaller"
+    binder.bind[Marshaller](classOf[Marshaller],classOf[impl.JsonXstreamMarshaller]) withId "jsonMarshaller"
   }
 
   def buildBlogConfiguration = {
@@ -78,69 +85,121 @@ object AppModule {
   
   
   def contributeApplicationDefaults(configuration : MappedConfiguration[String, String]) {
-    // Contributions to ApplicationDefaults will override any contributions to
-    // FactoryDefaults (with the same key). Here we're restricting the supported
-    // locales to just "en" (English). As you add localised message catalogs and other assets,
-    // you can extend this list of locales (it's a comma separated series of locale names;
-    // the first locale name is the default when there's no reasonable match).
-
     configuration.add(SymbolConstants.SUPPORTED_LOCALES, "en");
-
-    // The factory default is true but during the early stages of an application
-    // overriding to false is a good idea. In addition, this is often overridden
-    // on the command line as -Dtapestry.production-mode=false
     configuration.add(SymbolConstants.PRODUCTION_MODE, "false");
   }
 
-
-  /**
-   * This is a service definition, the service will be named "TimingFilter". The interface,
-   * RequestFilter, is used within the RequestHandler service pipeline, which is built from the
-   * RequestHandler service configuration. Tapestry IoC is responsible for passing in an
-   * appropriate Logger instance. Requests for static resources are handled at a higher level, so
-   * this filter will only be invoked for Tapestry related requests.
-   * 
-   * <p>
-   * Service builder methods are useful when the implementation is inline as an inner class
-   * (as here) or require some other kind of special initialization. In most cases,
-   * use the static bind() method instead. 
-   * 
-   * <p>
-   * If this method was named "build", then the service id would be taken from the 
-   * service interface and would be "RequestFilter".  Since Tapestry already defines
-   * a service named "RequestFilter" we use an explicit service id that we can reference
-   * inside the contribution method.
-   */    
-  def buildTimingFilter(log : Logger) : RequestFilter  = 	{
+  def buildTimingFilter(log : Logger) = {
     new RequestFilter() {
       override def service(request:Request, response:Response, handler:RequestHandler) : Boolean = {
         var startTime = System.currentTimeMillis()
         try {
-          // The responsibility of a filter is to invoke the corresponding method 
-          // in the handler. When you chain multiple filters together, each filter
-          // received a handler that is a bridge to the next filter.
-          handler.service(request, response);
+          handler.service(request, response)
         } finally {
-        	val elapsed = System.currentTimeMillis() - startTime;
+        	val elapsed = System.currentTimeMillis() - startTime
         	log.info("Request time: %d ms".format(elapsed))
         }
       }
-    };
-   }
+    }
+  }
 
-   /**
-   * This is a contribution to the RequestHandler service configuration. This is how we extend
-   * Tapestry using the timing filter. A common use for this kind of filter is transaction
-   * management or security. The @Local annotation selects the desired service by type, but only
-   * from the same module.  Without @Local, there would be an error due to the other service(s)
-   * that implement RequestFilter (defined in other modules).
+  def contributeRequestHandler(configuration:OrderedConfiguration[RequestFilter], 
+                               locator:ObjectLocator) {
+
+    configuration.add("Timing", locator.getService("timingFilter",classOf[RequestFilter]))
+  }
+
+  /*
+   * Marshaller configuration. 
+   * That is the part where we weave the web that
+   * link interfaces, types and actual implementation
+   * of Marshaller, so that when the user will call
+   * ----
+   * injectedMarshaller.to("format", data) 
+   * ----
+   * the actual marshaller for 'format' will be called
+   * on 'data'. 
+   * 
+   * For that, we rely on a two step binding:
+   * - we bind string into MarshallerType ;
+   * - we bind MarshallerTypes to marshaller service
+   * Marshaller service are build and configured inpendently
+   * of their use. 
+   * 
    */
-   def contributeRequestHandler(configuration:OrderedConfiguration[RequestFilter], 
-                                @Local filter:RequestFilter) {
-     // Each contribution to an ordered configuration has a name, When necessary, you may
-     // set constraints to precisely control the invocation order of the contributed filter
-     // within the pipeline.
-     configuration.add("Timing", filter);
-   }
+      
+  /*
+   * Xstream configuration
+   * 
+   * That is the really intersting part. It allows any tapestry module 
+   * (read: module from other jars) to contribute class configuration.
+   * That mean that a module which comes with its domain class configuration
+   * is able to configure them, even if the marshaller service is in 
+   * an other module. That's great in term of loosly coupling. 
+   */
+  def contributeXstreamClassAlias(configuration:OrderedConfiguration[Calias]) {
+     configuration.add("article",new Calias("article",classOf[org.example.blog.data.Article]))
+  } 
+   
+   
+  def buildClientMarshaller(
+    configuration:java.util.Map[MarshallerType,Marshaller],
+    analyzer:MarshallerAnalyzer
+  ) = {
+    new impl.ClientMarshallerImpl(configuration,analyzer.get)
+  }
+
+  /*
+   * Tapestry way of implementing the Chain of Command
+   * pattern, {@see http://tapestry.apache.org/tapestry5/tapestry-ioc/command.html}
+   * 
+   * We will use this facade as the "MarshallerAnalyzer" service,
+   * and delegate the actual type look-up to the commands.
+   * 
+   * As we are in Scala, we may have simply use the 
+   * iterator#dropWhile method, but it wouldn't have played nicely with
+   * what is provided by the framework
+   */
+  def buildMarshallerAnalyzer(commands:java.util.List[MarshallerAnalyzer],
+                              chainBuilder:ChainBuilder
+  ) = chainBuilder.build(classOf[MarshallerAnalyzer], commands)
+
+
+  /*
+   * Here, we add a command into the chain of command 
+   * "MarshallerAnalyzer" for XML and Json type.
+   */
+  def contributeMarshallerAnalyzer(configuration:OrderedConfiguration[MarshallerAnalyzer]) {
+    configuration.add("xml",new FormatMarshallerAnalyzer("xml",Xml))
+    configuration.add("json",new FormatMarshallerAnalyzer("json",Json))
+  }
+   
+  /*
+   * ClientMarshaller configuration
+   * 
+   * Now that we have configured marshaller, a mathcing
+   * between types and format name, we only lack the
+   * binding between types and marshaller.
+   * 
+   * Here, we say to Tapestry : when you encouter 
+   * something that need to use the [MarshallerType],
+   * use the given implementation. OK, it's exactly 
+   * a strategy pattern. 
+   * 
+   * Implementation note : T5 provides an @InjectService("id")
+   * annotation to inject named service directly in the methode
+   * parameters. 
+   * We can't use it because of a bug in Scala compiler (perhaps)
+   * {@see http://fanf42.blogspot.com/2009/03/java-annotation-scala-object-and.html}
+   * 
+   */
+  def contributeClientMarshaller(
+    configuration:MappedConfiguration[MarshallerType,Marshaller],
+    locator:ObjectLocator
+  ) {
+     
+    configuration.add(Xml,locator.getService("xmlMarshaller",classOf[Marshaller]))
+    configuration.add(Json,locator.getService("jsonMarshaller",classOf[Marshaller]))
+  }
    
 }
