@@ -17,15 +17,28 @@
 package org.example.blog.components
 
 import org.apache.tapestry5.ioc.annotations.Inject
-import org.apache.tapestry5.annotations.{Property,IncludeStylesheet}
+import org.apache.tapestry5.annotations._
 
 import org.apache.tapestry5.RenderSupport
+import org.apache.tapestry5.ComponentResources
 
 import org.example.blog.data.BlogConfiguration
 
 @IncludeStylesheet(Array("context:theme/red/style.css"))
 class Layout {
 
+  @Inject
+  var resources : ComponentResources = _
+  
+  @PageLoaded
+  def load() {
+    println("+++ component loaded: "  + resources.getCompleteId)
+  }
+  
+  def onActivate() {
+    println("+++ component activation: "  + resources.getCompleteId)
+  }
+  
   @Inject @Property
   var conf : BlogConfiguration = _
   

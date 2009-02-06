@@ -17,7 +17,7 @@
 package org.example.blog.pages;
 
 import org.apache.tapestry5.ioc.annotations.Inject
-import org.apache.tapestry5.annotations.Property
+import org.apache.tapestry5.annotations._
 
 import org.example.blog.data.Article
 import org.example.blog.services.ReadDao
@@ -28,6 +28,13 @@ import org.example.blog.services.ReadDao
  * @author <a href="mailto:fanf42@gmail.com">Francois Armand</a> 
  */
 class Index {
+  
+  
+  @PageLoaded
+  def onload() {
+    println("*** page loaded");
+    
+  }
   
   @Inject
   var readArticleDao : ReadDao[Article, String] = _

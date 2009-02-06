@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<title>Showdown - Markdown in Javascript</title>
+	<script type="text/javascript" src="${asset:context:script/showdown.js}"></script>
+	<script type="text/javascript" src="${asset:context:script/showdown-gui.js}"></script>
+
+</head>
+
+<body>
+
+	<div id="pageHeader">
+		<h1><a href="http://www.attacklab.net/showdown-gui.html">Showdown</a></h1>
+		<h4>a javascript port of <a href="http://daringfireball.net/projects/markdown/" title="The Markdown web site">Markdown</a></h4>
+	</div>
+	
+	<div id="leftContainer">
+		<div class="paneHeader">
+			<span>Input</span>
+		</div>
+		<textarea id="inputPane" cols="80" rows="20" class="pane">Using this tool
+---------------
+
+This page lets you create HTML by entering text in a simple format that's easy to read and write.
+
+  - Type Markdown text in the left window
+  - See the HTML in the right
+
+Markdown is a lightweight markup language based on the formatting conventions that people naturally use in email.  As [John Gruber] writes on the [Markdown site] [1]:
+
+&gt; The overriding design goal for Markdown's
+&gt; formatting syntax is to make it as readable 
+&gt; as possible. The idea is that a
+&gt; Markdown-formatted document should be
+&gt; publishable as-is, as plain text, without
+&gt; looking like it's been marked up with tags
+&gt; or formatting instructions.
+
+This document is written in Markdown; you can see the plain-text version on the left.  To get a feel for Markdown's syntax, type some text into the left window and watch the results in the right.  You can see a Markdown syntax guide by switching the right-hand window from *Preview* to *Syntax Guide*.
+
+Showdown is a Javascript port of Markdown.  You can get the full [source code] by clicking on the version number at the bottom of the page.
+
+**Start with a [blank page] or edit this document in the left window.**
+
+  [john gruber]: http://daringfireball.net/
+  [1]: http://daringfireball.net/projects/markdown/
+  [source code]: http://www.attacklab.net/showdown-v0.9.zip
+  [blank page]: ?blank=1 "Clear all text"
+
+</textarea> 
+	</div>
+
+	<div id="rightContainer">
+		<div class="paneHeader">
+			<select id="paneSetting">
+				<option value="previewPane">Preview</option>
+				<option value="outputPane">HTML Output</option>
+				<option value="syntaxPane">Syntax Guide</option>
+			</select>
+		</div>
+	
+		<textarea id="outputPane" class="pane" cols="80" rows="20" readonly="readonly"></textarea>
+	
+		<div id="previewPane" class="pane"><noscript><h2>You'll need to enable Javascript to use this tool.</h2></noscript></div>
+	
+
+
+
+
+
+
+
+<textarea id="syntaxPane" class="pane" cols="80" rows="20" readonly="readonly">
+Plop doc.
+</textarea>
+
+
+
+
+
+	</div>
+	
+	<div id="footer">
+	
+		<span id="convertTextControls">
+			<button id="convertTextButton" type="button" title="Convert text now">
+				Convert text
+			</button>
+			
+			<select id="convertTextSetting">
+				<option value="delayed">in the background</option>
+				<option value="continuous">every keystroke</option>
+				<option value="manual">manually</option>
+			</select>
+		</span>
+		<div id="processingTime" title="Last processing time">0 ms</div>
+	</div>
+	
+	
+	</body>
+</html>

@@ -1,0 +1,8 @@
+<t:container xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd">
+
+
+	<t:textarea t:id="plop" class="textInput" id="${clientId}_input"/>
+	
+	<div class="textPreview" id="${clientId}_preview"></div>
+
+</t:container>

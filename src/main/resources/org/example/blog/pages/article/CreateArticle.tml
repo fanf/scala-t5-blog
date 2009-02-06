@@ -14,8 +14,11 @@
 		</p>
 		
 		<p>
+<!--
 			<t:label for="content" /><br/>
 			<t:textarea class="large" t:id="content" value="article.content" />
+-->
+			<t:showdownTextarea t:id="content" value="article.content" />
 		</p>
 		<t:submit />
 	</t:form>
