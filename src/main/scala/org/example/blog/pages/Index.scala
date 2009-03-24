@@ -29,13 +29,6 @@ import org.example.blog.services.ReadDao
  */
 class Index {
   
-  
-  @PageLoaded
-  def onload() {
-    println("*** page loaded");
-    
-  }
-  
   @Inject
   var readArticleDao : ReadDao[Article, String] = _
   

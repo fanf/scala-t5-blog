@@ -60,5 +60,10 @@ object Article {
     a.published = source.published
     a
   }
-  
 }
+
+object NoneArticle extends Article(None) {
+  creationDate = new Date(0L);
+  title = "No such article"
+}
+  

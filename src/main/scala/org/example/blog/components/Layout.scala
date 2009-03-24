@@ -29,16 +29,7 @@ class Layout {
 
   @Inject
   var resources : ComponentResources = _
-  
-  @PageLoaded
-  def load() {
-    println("+++ component loaded: "  + resources.getCompleteId)
-  }
-  
-  def onActivate() {
-    println("+++ component activation: "  + resources.getCompleteId)
-  }
-  
+    
   @Inject @Property
   var conf : BlogConfiguration = _
   
