@@ -17,7 +17,7 @@
 package org.example.blog.pages.article
 
 import org.example.blog.services.ReadDao
-import org.example.blog.services.ClientMarshaller
+import org.example.blog.services.Marshaller
 
 import org.example.blog.data.Article
 import org.example.blog.data.BlogConfiguration
@@ -36,9 +36,12 @@ class ViewArticle {
   @Inject
   var conf : BlogConfiguration = _
   
-  @Inject 
-  var marshaller : ClientMarshaller = _
+  @Inject @Service("xmlXstreamMarshaller")
+  var xmlMarshaller : Marshaller = _
   
+  @Inject @Service("jsonXstreamMarshaller")
+  var jsonMarshaller : Marshaller = _
+
   @Property
   var article : Article = _
   
@@ -53,15 +56,15 @@ class ViewArticle {
   }
 
   
-  def onXml = new TextStreamResponse("text/xml",this.marshaller.to("null",null))
-  def onJson = onXml
+  def onXml = new TextStreamResponse("text/xml",this.xmlMarshaller.to(null))
+  def onJson = new TextStreamResponse("text/plain",this.jsonMarshaller.to(null))
   
   def onXml(id:String) = {
-    new TextStreamResponse("text/xml",this.marshaller.to("xml",this.get(id)))
+    new TextStreamResponse("text/xml",this.xmlMarshaller.to(this.get(id)))
   }
 
   def onJson(id:String) = {
-    new TextStreamResponse("text/plain",this.marshaller.to("json",this.get(id)))
+    new TextStreamResponse("text/plain",this.jsonMarshaller.to(this.get(id)))
   }
   
   private def get(id:String) = 
