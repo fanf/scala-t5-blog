@@ -19,7 +19,7 @@ package org.example.blog.pages.article
 import org.example.blog.services.ReadDao
 import org.example.blog.services.Marshaller
 
-import org.example.blog.data.Article
+import org.example.blog.data.{Article,NoneArticle}
 import org.example.blog.data.BlogConfiguration
 
 import org.apache.tapestry5.ioc.annotations.Inject
@@ -36,10 +36,10 @@ class ViewArticle {
   @Inject
   var conf : BlogConfiguration = _
   
-  @Inject @Service("xmlXstreamMarshaller")
+  @Inject @Service("xmlMarshaller")
   var xmlMarshaller : Marshaller = _
   
-  @Inject @Service("jsonXstreamMarshaller")
+  @Inject @Service("jsonMarshaller")
   var jsonMarshaller : Marshaller = _
 
   @Property
@@ -54,10 +54,9 @@ class ViewArticle {
   def setupRender {
     this.article = this.get(id)
   }
-
   
-  def onXml = new TextStreamResponse("text/xml",this.xmlMarshaller.to(null))
-  def onJson = new TextStreamResponse("text/plain",this.jsonMarshaller.to(null))
+  def onXml = new TextStreamResponse("text/xml",this.xmlMarshaller.to(NoneArticle))
+  def onJson = new TextStreamResponse("text/plain",this.jsonMarshaller.to(NoneArticle))
   
   def onXml(id:String) = {
     new TextStreamResponse("text/xml",this.xmlMarshaller.to(this.get(id)))
@@ -68,6 +67,6 @@ class ViewArticle {
   }
   
   private def get(id:String) = 
-    if(null == id ) new Article(None) 
-    else this.articleDao.get(id).getOrElse(new Article(None))
+    if(null == id ) NoneArticle
+    else this.articleDao.get(id).getOrElse(NoneArticle)
 }
