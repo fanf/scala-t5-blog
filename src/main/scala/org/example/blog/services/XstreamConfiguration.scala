@@ -1,6 +1,6 @@
 package org.example.blog.services
 
-import com.thoughtworks.xstream.converters.SingleValueConverter
+import com.thoughtworks.xstream.converters.ConverterMatcher
 
 /*
  * Theses traits are the differents way to configure
@@ -14,11 +14,20 @@ import com.thoughtworks.xstream.converters.SingleValueConverter
  * multi-parametrized types. That's a lot less cool
  * than direct uses of tuples :/
  */
-trait Palias extends scala.Tuple2[String,String]
+//for package aliasing
+class Palias(_1:String,_2:String) extends scala.Tuple2[String,String](_1,_2)
+//for class aliasing
 class Calias(_1:String,_2:Class[_]) extends Tuple2[String,Class[_]](_1,_2)
+//for field aliasing
 class Falias(_1:String,_2:Class[_],_3:String) extends Tuple3[String,Class[_],String](_1,_2,_3)
-trait Icoll extends Tuple2[Class[_],String]
-trait Ofield extends Tuple2[Class[_],String]
+//for implicit collection
+class Icoll(_1:Class[_],_2:String) extends Tuple2[Class[_],String](_1,_2)
+//ommiting fields
+class Ofield(_1:Class[_],_2:String) extends Tuple2[Class[_],String](_1,_2)
+//for using field as attribute
+class Uattr(_1:Class[_],_2:String) extends Tuple2[Class[_],String](_1,_2)
+//for loval Concerters
+class Lconv(_1:Class[_],_2:String,_3:ConverterMatcher) extends Tuple3[Class[_],String,ConverterMatcher](_1,_2,_3)
 
 /*
  * In get*Alias methods, the first parameter 
@@ -41,9 +50,17 @@ trait XstreamImplicitCollection {
 }
 
 trait XstreamRegisterConverter {
-  def getConverters : Collection[SingleValueConverter]
+  def getConverters : Collection[ConverterMatcher]
+}
+
+trait XstreamRegisterLocalConverter {
+  def getLocalConverters : Collection[Lconv]
 }
 
 trait XstreamOmitField {
   def getOmitFields : Collection[Ofield]
+}
+
+trait XstreamUseAttribute {
+  def getUseAttributes : Collection[Uattr]
 }

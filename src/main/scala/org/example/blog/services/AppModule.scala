@@ -36,7 +36,7 @@ import org.slf4j.Logger
 import org.example.blog.data._
 import org.example.blog.services.impl._
 import org.example.blog.services.impl.dao.InmemoryArticleDao
-import com.thoughtworks.xstream.converters.SingleValueConverter
+import com.thoughtworks.xstream.converters.{ConverterMatcher,SingleValueConverter}
 
 /**
 * This module is automatically included as part of the Tapestry IoC Registry, it's a good place to
@@ -52,6 +52,8 @@ object AppModule {
     binder.bind[XstreamImplicitCollection](classOf[XstreamImplicitCollection], classOf[impl.XstreamImplicitCollectionImpl])
     binder.bind[XstreamOmitField](classOf[XstreamOmitField], classOf[impl.XstreamOmitFieldImpl])
     binder.bind[XstreamRegisterConverter](classOf[XstreamRegisterConverter], classOf[impl.XstreamRegisterConverterImpl])
+    binder.bind[XstreamRegisterLocalConverter](classOf[XstreamRegisterLocalConverter], classOf[impl.XstreamRegisterLocalConverterImpl])
+    binder.bind[XstreamUseAttribute](classOf[XstreamUseAttribute], classOf[impl.XstreamUseAttributeImpl])
 
     binder.bind[Marshaller](classOf[Marshaller],classOf[impl.XmlXstreamMarshaller]) withId "xmlMarshaller"
     binder.bind[Marshaller](classOf[Marshaller],classOf[impl.JsonXstreamMarshaller]) withId "jsonMarshaller"
@@ -140,6 +142,37 @@ object AppModule {
   def contributeXstreamClassAlias(configuration:OrderedConfiguration[Calias]) {
      configuration.add("article",new Calias("article",classOf[org.example.blog.data.Article]))
   } 
+
+  def contributeXstreamUseAttribute(configuration:OrderedConfiguration[Uattr]) {
+    configuration.add("article_id",new Uattr(classOf[Article],"id"))
+    configuration.add("article_title",new Uattr(classOf[Article],"title"))
+    configuration.add("article_published",new Uattr(classOf[Article],"published"))
+  }
+
+  def contributeXstreamOmitField(configuration:OrderedConfiguration[Ofield]) {
+    configuration.add("article_comments", new Ofield(classOf[Article],"comments"))
+  }
+  
+  def contributeXstreamRegisterLocalConverter(configuration:OrderedConfiguration[Lconv]) {
+    configuration.add("optionConverter", 
+                      new Lconv(classOf[Article],"id",
+                                new SingleValueConverter() {
+                                  def fromString(s:String) = if("none" == s) None else Some(s)
+                                  def toString(a:Object) = a match { 
+                                    case None => "none" 
+                                    case Some(x) => x.toString 
+                                    case _ => error("Not supported type: " + a.getClass.getName)
+                                  }
+                                  def canConvert(c:Class[_]) = {
+                                    if(c == classOf[scala.Option[_]]) true
+                                    else false
+                                  }	
+                                }
+                      )
+    )
+  }
+
+
    
    
   def buildClientMarshaller(

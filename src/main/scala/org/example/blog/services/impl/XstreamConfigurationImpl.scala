@@ -1,6 +1,6 @@
 package org.example.blog.services.impl
 
-import com.thoughtworks.xstream.converters.SingleValueConverter
+import com.thoughtworks.xstream.converters.ConverterMatcher
 
 import org.example.blog.services._
 
@@ -23,11 +23,18 @@ class XstreamImplicitCollectionImpl(implicitCollections:java.util.List[Icoll]) e
   def getImplicitCollections : Collection[Icoll] = implicitCollections
 }
 
-class XstreamRegisterConverterImpl(converters:java.util.List[SingleValueConverter]) extends XstreamRegisterConverter {
-  def getConverters : Collection[SingleValueConverter] = converters
+class XstreamRegisterConverterImpl(converters:java.util.List[ConverterMatcher]) extends XstreamRegisterConverter {
+  def getConverters : Collection[ConverterMatcher] = converters
+}
+
+class XstreamRegisterLocalConverterImpl(converters:java.util.List[Lconv]) extends XstreamRegisterLocalConverter {
+  def getLocalConverters : Collection[Lconv] = converters
 }
 
 class XstreamOmitFieldImpl(omitFields:java.util.List[Ofield]) extends XstreamOmitField {
   def getOmitFields : Collection[Ofield] = omitFields
 }
 
+class XstreamUseAttributeImpl(useAttributes:java.util.List[Uattr]) extends XstreamUseAttribute {
+  def getUseAttributes : Collection[Uattr] = useAttributes
+}

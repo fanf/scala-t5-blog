@@ -4,6 +4,8 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
+import com.thoughtworks.xstream.converters.{ConverterMatcher,SingleValueConverter,Converter}
+
 import org.example.blog.services._
 
 
@@ -39,8 +41,9 @@ class XstreamMarshaller(
   xstreamFieldAlias: XstreamFieldAlias,
   xstreamImplicitCollection: XstreamImplicitCollection,
   xstreamRegisterConverter: XstreamRegisterConverter,
-  xstreamOmitField: XstreamOmitField
-
+  xstreamRegisterLocalConverter: XstreamRegisterLocalConverter,
+  xstreamOmitField: XstreamOmitField,
+  xstreamUseAttribute:XstreamUseAttribute
 ) extends Marshaller 
 {
   
@@ -61,13 +64,30 @@ class XstreamMarshaller(
   } )
 
   xstreamRegisterConverter.getConverters.foreach( c => {
-    xstream.registerConverter(c)
+    c match {
+      case x:Converter => xstream.registerConverter(x.asInstanceOf[Converter])
+      case x:SingleValueConverter => xstream.registerConverter(x.asInstanceOf[SingleValueConverter])
+      case x => error("Can not handle converter:" + x)
+    }
+    
   } )
-  
+
+  xstreamRegisterLocalConverter.getLocalConverters.foreach( c => {
+    c._3 match {
+      case x:Converter => xstream.registerConverter(x.asInstanceOf[Converter])
+      case x:SingleValueConverter => xstream.registerConverter(x.asInstanceOf[SingleValueConverter])
+      case x => error("Can not handle converter:" + x)
+    }
+    
+  } )
+
   xstreamOmitField.getOmitFields.foreach( o => {
     xstream.omitField(o._1,o._2)
   } )
   
+  xstreamUseAttribute.getUseAttributes.foreach( o => {
+    xstream.useAttributeFor(o._1,o._2)
+  } )
   override def to(o : Any) = this.xstream.toXML(o)
   
   override def from(s:String) : Any =  this.xstream.fromXML(s) 
@@ -81,7 +101,9 @@ class XmlXstreamMarshaller(
   xstreamFieldAlias: XstreamFieldAlias,
   xstreamImplicitCollection: XstreamImplicitCollection,
   xstreamRegisterConverter: XstreamRegisterConverter,
-  xstreamOmitField: XstreamOmitField
+  xstreamRegisterLocalConverter: XstreamRegisterLocalConverter,
+  xstreamOmitField: XstreamOmitField,
+  xstreamUseAttribute:XstreamUseAttribute
 
 ) extends XstreamMarshaller(
   new XStream(new DomDriver()),
@@ -90,7 +112,9 @@ class XmlXstreamMarshaller(
   xstreamFieldAlias, 
   xstreamImplicitCollection, 
   xstreamRegisterConverter, 
-  xstreamOmitField)
+  xstreamRegisterLocalConverter, 
+  xstreamOmitField,
+  xstreamUseAttribute)
 
 class JsonXstreamMarshaller(
   xstreamPackageAlias: XstreamPackageAlias,
@@ -98,7 +122,9 @@ class JsonXstreamMarshaller(
   xstreamFieldAlias: XstreamFieldAlias,
   xstreamImplicitCollection: XstreamImplicitCollection,
   xstreamRegisterConverter: XstreamRegisterConverter,
-  xstreamOmitField: XstreamOmitField
+  xstreamRegisterLocalConverter: XstreamRegisterLocalConverter,
+  xstreamOmitField: XstreamOmitField,
+  xstreamUseAttribute:XstreamUseAttribute
 
 ) extends XstreamMarshaller(
   new XStream(new JsonHierarchicalStreamDriver()),
@@ -107,7 +133,9 @@ class JsonXstreamMarshaller(
   xstreamFieldAlias, 
   xstreamImplicitCollection, 
   xstreamRegisterConverter, 
-  xstreamOmitField)
+  xstreamRegisterLocalConverter, 
+  xstreamOmitField,
+  xstreamUseAttribute)
 
 
 

@@ -23,8 +23,10 @@ import org.example.blog.data.Article
 import org.example.blog.data.BlogConfiguration
 
 import org.apache.tapestry5.ioc.annotations.Inject
-import org.apache.tapestry5.annotations.Property
+import org.apache.tapestry5.annotations.{Property,Service}
 import org.apache.tapestry5.util.TextStreamResponse
+
+import org.example.blog.services.impl.XstreamMarshaller
 
 class ViewArticle {
 
@@ -36,7 +38,7 @@ class ViewArticle {
   
   @Inject 
   var marshaller : ClientMarshaller = _
-    
+  
   @Property
   var article : Article = _
   
