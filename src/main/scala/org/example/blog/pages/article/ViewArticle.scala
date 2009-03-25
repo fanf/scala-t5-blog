@@ -47,7 +47,7 @@ class ViewArticle {
   
   var id : String = _
   
-  def onActivate(id:String) { this.id = id } 
+  def onActivate(id:String) = this.id = id
   
   def getAuthorName() = this.conf.getAuthor.getLogin
   

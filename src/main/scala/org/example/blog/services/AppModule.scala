@@ -45,22 +45,10 @@ import com.thoughtworks.xstream.converters.{ConverterMatcher,SingleValueConverte
 object AppModule {
   
   def bind(binder : ServiceBinder) {
-  
+    binder.bind[Marshaller](classOf[Marshaller],classOf[impl.XmlXstreamMarshaller]) withId "xmlMarshaller"
+    binder.bind[Marshaller](classOf[Marshaller],classOf[impl.JsonXstreamMarshaller]) withId "jsonMarshaller"
   }
 
-  def buildXmlMarshaller(): Marshaller = {
-    val m = new XmlXstreamMarshaller
-    ConfigureArticle4Xstream.configure(m.xstream)
-    m
-  }
-
-  def buildJsonMarshaller(): Marshaller = {
-    val m = new JsonXstreamMarshaller
-    ConfigureArticle4Xstream.configure(m.xstream)
-    m
-  }
-
-  
   def buildBlogConfiguration = {
     val author = new User("jondoe")
     author.commonname = "Jon"
